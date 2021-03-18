@@ -50,9 +50,6 @@ jobs:
           php_version: 7.4
           version: latest
       - name: PHPUnit
-        uses: php-actions/phpunit@v2
+        uses: docker://php:7.4
         with:
-          bootstrap: vendor/autoload.php
-          configuration: phpunit.xml.dist
-          php_version: 7.4
-          version: 9.5
+          args: vendor/bin/phpunit
