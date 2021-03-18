@@ -14,5 +14,5 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
       - uses: php-actions/composer@v5
         with:
-          php_version: 7.2
+          php_version: 7.4
           version: latest
