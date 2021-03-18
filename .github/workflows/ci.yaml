@@ -2,7 +2,7 @@ name: Composer
 on: [push]
 
 jobs:
-  build:
+  php-quality:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,14 +16,14 @@ jobs:
         with:
           php_version: 7.4
           version: latest
-      - name: PHPStan
-        uses: docker://php:7.4
-        with:
-          args: vendor/bin/phpstan analyse -c phpstan.neon
       - name: php-cs-fixer
         uses: docker://php:7.4
         with:
           args: vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --stop-on-violation --using-cache=no
+      - name: PHPStan
+        uses: docker://php:7.4
+        with:
+          args: vendor/bin/phpstan analyse -c phpstan.neon
       - name: phpunit
         uses: docker://php:7.4
         with:
