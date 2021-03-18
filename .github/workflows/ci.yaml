@@ -2,7 +2,7 @@ name: Code Quality
 on: [pull_request]
 
 jobs:
-  php-cs:
+  Codestyle:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -19,7 +19,7 @@ jobs:
         with:
           args: vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --stop-on-violation --using-cache=no
 
-  phpstan:
+  PHPStan:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -37,7 +37,7 @@ jobs:
         with:
           args: vendor/bin/phpstan analyse -c phpstan.neon
 
-  phpunit:
+  PHPUnit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -55,4 +55,4 @@ jobs:
           bootstrap: vendor/autoload.php
           configuration: phpunit.xml.dist
           php_version: 7.4
-          version: 8.5.15
+          version: 9.5
