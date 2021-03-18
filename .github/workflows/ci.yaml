@@ -1,30 +1,66 @@
-name: Composer
-on: [push]
+name: Code Quality
+on: [pull_request]
 
 jobs:
-  php-quality:
+  Codestyle:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
-      - name: Cache Composer dependencies
-        uses: actions/cache@v2
+      - uses: actions/cache@v2
         with:
           path: /tmp/composer-cache
           key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+      - uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-vendor-${{ hashFiles('**/composer.lock') }}
       - uses: php-actions/composer@v5
         with:
           php_version: 7.4
           version: latest
-      - name: php-cs-fixer
+      - name: PHP cs-fixer
         uses: docker://php:7.4
         with:
           args: vendor/bin/php-cs-fixer fix --config=.php_cs.dist -v --dry-run --stop-on-violation --using-cache=no
+
+  PHPStan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+      - uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-vendor-${{ hashFiles('**/composer.lock') }}
+      - uses: php-actions/composer@v5
+        with:
+          php_version: 7.4
+          version: latest
       - name: PHPStan
         uses: docker://php:7.4
         with:
           args: vendor/bin/phpstan analyse -c phpstan.neon
-      - name: phpunit
+
+  PHPUnit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+      - uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-vendor-${{ hashFiles('**/composer.lock') }}
+      - uses: php-actions/composer@v5
+        with:
+          php_version: 7.4
+          version: latest
+      - name: PHPUnit
         uses: docker://php:7.4
         with:
-          args: vendor/bin/simple-phpunit
+          args: vendor/bin/phpunit
