@@ -1,4 +1,8 @@
 <?php
+$finder = PhpCsFixer\Finder::create()
+    ->in(__DIR__ . '/src')
+;
+
 $config = PhpCsFixer\Config::create();
 $config->setRules(
     [
@@ -7,6 +11,6 @@ $config->setRules(
         'concat_space' => ['spacing' => 'one'],
         'phpdoc_var_without_name' => false,
     ]
-);
+)->setFinder($finder);
 
 return $config;
